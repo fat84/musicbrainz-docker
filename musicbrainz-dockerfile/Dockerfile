@@ -48,6 +48,7 @@ ADD scripts/start.sh /start.sh
 ADD scripts/crons.conf /crons.conf
 ADD scripts/replication.sh /replication.sh
 ADD scripts/createdb.sh /createdb.sh
+ADD scripts/download-data.py /download-data.py
 ADD scripts/recreatedb.sh /recreatedb.sh
 ADD scripts/set-token.sh /set-token.sh
 ADD 001-musicbrainz /etc/nginx/sites-available/001-musicbrainz
