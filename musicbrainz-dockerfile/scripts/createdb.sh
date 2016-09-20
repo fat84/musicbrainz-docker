@@ -9,7 +9,7 @@ fi
 
 if [[ $FETCH_DUMPS == "-fetch" ]]; then
   echo "fetching data dumps"
-  /download-data.py $FTP_HOST /media/dbdump
+  python /download-data.py $FTP_HOST /media/dbdump
   /musicbrainz-server/admin/InitDb.pl --createdb --import /media/dbdump/mbdump*.tar.bz2 --echo
 else
   echo "no dumps found or dumps are incomplete"
