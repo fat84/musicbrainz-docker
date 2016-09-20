@@ -6,6 +6,7 @@ RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git-core postgresql
 RUN apt-get install -y \
     memcached \
+    python \
     redis-server \
     build-essential \
     libxml2-dev libpq-dev \
