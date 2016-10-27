@@ -4,6 +4,7 @@ RUN (echo "deb http://archive.ubuntu.com/ubuntu xenial main restricted universe 
 RUN apt-get update
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git-core postgresql
+RUN apt-get update
 RUN apt-get install -y \
     memcached \
     python \
