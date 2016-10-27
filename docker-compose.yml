@@ -1,12 +1,11 @@
 postgresqldata:
   build: data-dockerfile
-  restart: always
   volumes:
    - /datadump:/media/dbdump:rw
 
 postgresql:
   build: postgres-dockerfile
-  restart: always
+  restart: unless-stopped
   env_file:
    - ./postgres-dockerfile/postgres.env
   volumes:
@@ -20,7 +19,7 @@ musicbrainz:
    - "5000:5000"
   volumes_from:
    - postgresqldata
-  restart: always
+  restart: unless-stopped
   environment: 
    - MUSICBRAINZ_USE_PROXY=1
   expose: 
@@ -38,6 +37,7 @@ indexer:
 
 search:
   build: search-dockerfile
+  restart: unless-stopped  
   expose:
    - "8080"
   volumes:
