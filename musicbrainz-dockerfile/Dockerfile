@@ -19,14 +19,13 @@ RUN apt-get install -y \
 
 RUN git clone --recursive https://github.com/metabrainz/musicbrainz-server.git musicbrainz-server && \
     cd musicbrainz-server && \
-    git checkout v-2016-05-23-schema-change-v2
+    git checkout $MUSICBRAINZ_BRANCH
 
 RUN echo "eval $( perl -Mlocal::lib )" >> ~/.bashrc && . ~/.bashrc
 RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
 
 RUN apt-get install -y nodejs
-RUN cat /musicbrainz-server/Makefile.PL | grep ^requires > cpanfile
-RUN cpanm --installdeps --notest .
+RUN cpanm --installdeps --notest /musicbrainz-server 
 RUN cpanm --notest Plack::Middleware::Debug::Base \
     Catalyst::Plugin::Cache::HTTP \
     Catalyst::Plugin::StackTrace \
@@ -52,10 +51,12 @@ ADD scripts/recreatedb.sh /recreatedb.sh
 ADD scripts/set-token.sh /set-token.sh
 ADD 001-musicbrainz /etc/nginx/sites-available/001-musicbrainz
 
+RUN /musicbrainz-server/script/compile_resources.sh
+
 RUN rm /etc/nginx/nginx.conf
 RUN rm /etc/nginx/sites-enabled/default
 RUN ln -s /musicbrainz-server/admin/nginx/mbserver-rewrites.conf /etc/nginx/
-RUN ln -s /etc/nginx/sites-available/001-musicbrainz /etc/nginx/sites-enabled/
+.RUN ln -s /etc/nginx/sites-available/001-musicbrainz /etc/nginx/sites-enabled/
 RUN ln -s /musicbrainz-server/admin/nginx/nginx.conf /etc/nginx/
 RUN crontab /crons.conf
 

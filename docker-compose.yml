@@ -1,12 +1,12 @@
 postgresqldata:
   build: data-dockerfile
-  restart: always
+  restart: unless-stopped
   volumes:
    - /datadump:/media/dbdump:rw
 
 postgresql:
   build: postgres-dockerfile
-  restart: always
+  restart: unless-stopped
   env_file:
    - ./postgres-dockerfile/postgres.env
   volumes:
@@ -20,14 +20,17 @@ musicbrainz:
    - "5000:5000"
   volumes_from:
    - postgresqldata
-  restart: always
+  restart: unless-stopped
   environment: 
    - MUSICBRAINZ_USE_PROXY=1
+   - MUSICBRAINZ_BRANCH=master
   expose: 
    - "5000"
   links:
    - postgresql:db
    - search:search
+  volumes:
+   - /musicbrainz-server:/home/vagrant/musicbrainz-server
 
 indexer:
   build: indexer-dockerfile
